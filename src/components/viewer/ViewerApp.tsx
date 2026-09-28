@@ -1,12 +1,13 @@
 import { useEffect, useRef } from 'preact/hooks';
 import { routes, type Lang } from '../../i18n';
+import { ACCEPT, HANDOFF_HASH, takeFiles } from '../../lib/handoff';
 import type { WorkerRequest, WorkerResponse } from '../../lib/parser/parse.worker';
 import { chatNameFromFile } from '../../lib/parser/parse';
 import type { ParsedChat } from '../../lib/parser/types';
 import { chat, dict, errorMsg, lang, loadChat, status, type ViewerDict } from '../../lib/store';
 import { OpenError, openFiles } from '../../lib/zip';
 import { ChatHeader, useDisplayName } from './ChatHeader';
-import { ACCEPT, Dropzone } from './Dropzone';
+import { Dropzone } from './Dropzone';
 import { MessageList } from './MessageList';
 import { Lightbox, PdfDialog, WhoAreYou } from './Overlays';
 import { PrintView } from './PrintView';
@@ -121,6 +122,19 @@ export default function ViewerApp({ initialLang, dicts, titles }: Props) {
     };
     window.addEventListener('dragover', onDragOver);
     window.addEventListener('drop', onDrop);
+
+    if (location.hash === HANDOFF_HASH) {
+      history.replaceState(null, '', location.pathname);
+      status.value = 'reading';
+      takeFiles()
+        .then((files) => {
+          if (files) return handleFiles(files);
+          status.value = 'idle';
+        })
+        .catch(() => {
+          status.value = 'idle';
+        });
+    }
     return () => {
       document.removeEventListener('click', onClick, true);
       window.removeEventListener('dragover', onDragOver);

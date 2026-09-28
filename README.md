@@ -7,7 +7,8 @@ Site: https://whatsappviewer.zenvixlabs.app
 ## Recursos
 
 - Abre o `.txt` (sem mídia) ou o `.zip` (com mídia) exportado pelo WhatsApp, de Android ou iPhone, em vários idiomas
-- Visual do WhatsApp Web: balões, rabichos, separadores de data, nomes coloridos em grupos, tema claro e escuro
+- Visual familiar, inspirado no WhatsApp: balões, separadores de data, nomes coloridos em grupos, tema claro e escuro
+- Arraste o arquivo direto na landing: ele é repassado ao visualizador localmente (IndexedDB), sem upload
 - Fotos, figurinhas, vídeos, áudios e documentos direto na conversa, com galeria e visualizador
 - Filtro por período, filtro por pessoa, "ir para a data" e escolha de quem é você
 - Busca instantânea sem acentos, com destaque e navegação entre resultados

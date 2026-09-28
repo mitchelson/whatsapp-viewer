@@ -4,24 +4,31 @@ export const pt = {
   meta: {
     title: 'WhatsApp Viewer: leia conversas exportadas do WhatsApp no navegador',
     description:
-      'Abra o arquivo .txt ou .zip exportado do WhatsApp e leia a conversa com o mesmo visual do app. Filtros por data e pessoa, busca, fotos e exportação em PDF. 100% no seu navegador, nada é enviado.',
+      'Abra o arquivo .txt ou .zip exportado do WhatsApp e leia a conversa num visual familiar, inspirado no app. Filtros por data e pessoa, busca, fotos e exportação em PDF. 100% no seu navegador, nada é enviado.',
     viewerTitle: 'Abrir conversa | WhatsApp Viewer',
   },
   nav: {
     how: 'Como exportar',
     features: 'Recursos',
     faq: 'Dúvidas',
+    tech: 'Tecnologia',
+    github: 'GitHub',
     open: 'Abrir conversa',
     language: 'Idioma',
     theme: 'Alternar tema',
   },
   hero: {
-    badge: '100% no navegador. Nada sai do seu computador.',
-    title: 'Leia suas conversas exportadas do WhatsApp como se estivesse no app',
+    badge: 'Código aberto. 100% no navegador.',
+    title: 'Leia suas conversas exportadas do WhatsApp direto no navegador',
     subtitle:
-      'Arraste o arquivo .txt ou .zip exportado do WhatsApp e veja a conversa com balões, fotos, áudios e vídeos. Filtre por data, por pessoa, pesquise qualquer texto e exporte em PDF.',
-    cta: 'Abrir conversa',
+      'Solte o .txt ou .zip exportado e veja a conversa com balões, fotos, áudios e vídeos, num visual familiar. Filtre por data ou pessoa, pesquise qualquer texto e exporte em PDF.',
+    cta: 'Abrir uma conversa',
+    drop: 'ou arraste o arquivo para cá',
+    dropActive: 'Solte o arquivo para abrir',
+    opening: 'Abrindo...',
+    facts: ['.txt ou .zip', '100% local', 'sem cadastro'],
     secondary: 'Como exportar do WhatsApp',
+    github: 'Ver código no GitHub',
   },
   mock: {
     name: 'Ana',
@@ -33,8 +40,9 @@ export const pt = {
     m4: 'Perfeito, nem precisa instalar nada!',
   },
   privacy: {
-    title: 'Sua conversa nunca sai do seu dispositivo',
-    text: 'Não existe servidor processando seus arquivos. Tudo é lido e exibido pelo seu próprio navegador, então funciona até sem internet depois que a página carrega. Ao fechar a aba, nada fica guardado.',
+    title: 'Suas conversas ficam no seu dispositivo',
+    lead: 'Sem upload. Sem processamento em servidor. Sem cadastro.',
+    text: 'Seu .txt ou .zip é lido direto no navegador. A conversa não precisa ser enviada para nenhum servidor, funciona até sem internet depois que a página carrega e, ao fechar a aba, nada fica guardado.',
     points: [
       'Sem upload: o arquivo é lido localmente',
       'Sem cadastro e sem login',
@@ -69,13 +77,28 @@ export const pt = {
   features: {
     title: 'Tudo que você precisa para ler conversas exportadas',
     items: [
-      { icon: 'bubble', title: 'Visual idêntico ao WhatsApp', desc: 'Balões, horários, separadores de data, nomes coloridos em grupos e tema claro ou escuro.' },
+      { icon: 'bubble', title: 'Visual familiar, inspirado no WhatsApp', desc: 'Balões, horários, separadores de data, nomes coloridos em grupos e tema claro ou escuro.' },
       { icon: 'image', title: 'Fotos, vídeos e áudios', desc: 'Abra o .zip com mídia e veja imagens, figurinhas, vídeos e áudios direto na conversa.' },
       { icon: 'calendar', title: 'Filtro por data', desc: 'Escolha um período e veja só as mensagens daquele intervalo, ou pule direto para um dia.' },
       { icon: 'people', title: 'Filtro por pessoa', desc: 'Em grupos, mostre só as mensagens de quem você quiser, com a contagem de cada participante.' },
       { icon: 'search', title: 'Busca instantânea', desc: 'Encontre qualquer palavra, mesmo sem acento, e navegue entre os resultados.' },
-      { icon: 'pdf', title: 'Exportar em PDF', desc: 'Gere um PDF da conversa filtrada com o mesmo visual, pronto para arquivar ou imprimir.' },
+      { icon: 'pdf', title: 'Exportar em PDF', desc: 'Gere um PDF da conversa filtrada no visual da conversa, pronto para arquivar ou imprimir.' },
     ],
+  },
+  tech: {
+    eyebrow: 'Por dentro do projeto',
+    title: 'Feito para conversas grandes',
+    subtitle: 'Um visualizador que roda inteiro no navegador, pensado para continuar rápido mesmo com anos de histórico.',
+    stat: '200 mil',
+    statLabel: 'mensagens abertas em cerca de 1 segundo',
+    items: [
+      { title: 'Processamento no navegador', desc: 'O arquivo é interpretado localmente, em um Web Worker, sem travar a tela. Não existe backend processando conversas.' },
+      { title: 'Renderização virtualizada', desc: 'Só as mensagens visíveis são desenhadas, então conversas com centenas de milhares de mensagens continuam fluidas.' },
+      { title: 'Mídia sob demanda', desc: 'O .zip é lido com acesso aleatório: cada foto só é extraída quando aparece na tela, sem carregar tudo na memória.' },
+      { title: 'Privacidade por arquitetura', desc: 'Não há servidor para receber dados, e a política de segurança do site bloqueia qualquer envio para fora.' },
+    ],
+    stack: ['Astro', 'Preact', 'TypeScript', 'Web Workers', 'Virtualização', 'Tailwind CSS'],
+    github: 'Ver código no GitHub',
   },
   faq: {
     title: 'Perguntas frequentes',

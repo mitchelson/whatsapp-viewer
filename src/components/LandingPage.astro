@@ -1,6 +1,8 @@
 ---
 import Base from '../layouts/Base.astro';
+import GithubIcon from './GithubIcon.astro';
 import { REPO_URL, dicts, routes, type Lang } from '../i18n';
+import { ACCEPT } from '../lib/handoff';
 
 interface Props {
   lang: Lang;
@@ -19,6 +21,13 @@ const icons: Record<string, string> = {
   pdf: '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/>',
 };
 
+const techIcons = [
+  '<rect x="5" y="5" width="14" height="14" rx="2"/><path d="M9 9h6v6H9zM9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"/>',
+  '<path d="m12 3 9 5-9 5-9-5z"/><path d="m3 13 9 5 9-5"/>',
+  '<rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/>',
+  '<path d="M12 3 4 6v6c0 5 3.4 8.3 8 9 4.6-.7 8-4 8-9V6z"/><path d="m9 12 2 2 4-4"/>',
+];
+
 const tailIn = '<svg class="wa-tail" viewBox="0 0 8 13"><path fill="currentColor" d="M1.533 3.568 8 12.193V1H2.812C1.042 1 .474 2.156 1.533 3.568z"/></svg>';
 const tailOut = '<svg class="wa-tail" viewBox="0 0 8 13"><path fill="currentColor" d="M5.188 1H0v11.193l6.467-8.625C7.526 2.156 6.958 1 5.188 1z"/></svg>';
 ---
@@ -29,18 +38,54 @@ const tailOut = '<svg class="wa-tail" viewBox="0 0 8 13"><path fill="currentColo
       <div class="pointer-events-none absolute inset-x-0 -top-40 -z-10 h-[520px] bg-[radial-gradient(ellipse_at_top,rgba(0,168,132,0.18),transparent_65%)]"></div>
       <div class="mx-auto grid max-w-6xl items-center gap-12 px-4 pt-14 pb-20 md:grid-cols-2 md:pt-20">
         <div>
-          <span class="inline-flex items-center gap-2 rounded-full bg-wa-teal/10 px-3 py-1 text-xs font-semibold text-wa-teal-dark dark:text-wa-green">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>
+          <a
+            href={REPO_URL}
+            rel="noopener"
+            class="inline-flex items-center gap-2 rounded-full bg-wa-teal/10 px-3 py-1 text-xs font-semibold text-wa-teal-dark transition hover:bg-wa-teal/15 dark:text-wa-green"
+          >
+            <GithubIcon class="size-3.5" />
             {d.hero.badge}
-          </span>
+          </a>
           <h1 class="mt-5 text-4xl leading-tight font-bold tracking-tight text-balance md:text-5xl">{d.hero.title}</h1>
           <p class="mt-5 text-lg leading-8 text-wa-muted dark:text-[#aebac1]">{d.hero.subtitle}</p>
-          <div class="mt-8 flex flex-wrap gap-3">
-            <a href={viewer} class="rounded-full bg-wa-teal px-7 py-3 font-semibold text-white shadow-lg shadow-wa-teal/25 transition hover:bg-wa-teal-dark">
-              {d.hero.cta}
-            </a>
-            <a href="#how" class="rounded-full border border-black/10 px-7 py-3 font-semibold transition hover:bg-black/5 dark:border-white/15 dark:hover:bg-white/5">
-              {d.hero.secondary}
+
+          <div
+            id="hero-drop"
+            data-viewer={viewer}
+            data-drop-active={d.hero.dropActive}
+            data-opening={d.hero.opening}
+            class="mt-8 rounded-3xl border-2 border-dashed border-wa-teal/35 bg-wa-teal/[0.04] p-5 transition aria-busy:opacity-70 data-[over]:scale-[1.02] data-[over]:border-wa-teal data-[over]:bg-wa-teal/10 dark:border-wa-teal/40"
+          >
+            <div class="flex flex-col items-center gap-3 sm:flex-row sm:gap-5">
+              <a
+                href={viewer}
+                data-pick
+                class="group inline-flex items-center gap-2.5 rounded-full bg-wa-teal px-7 py-3.5 text-lg font-semibold text-white shadow-lg shadow-wa-teal/25 transition hover:bg-wa-teal-dark"
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3m0 0L8 7m4-4 4 4"></path><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"></path></svg>
+                {d.hero.cta}
+                <span class="transition group-hover:translate-x-0.5" aria-hidden="true">→</span>
+              </a>
+              <span data-hint class="text-sm text-wa-muted dark:text-[#aebac1]">{d.hero.drop}</span>
+            </div>
+            <ul class="mt-4 flex flex-wrap justify-center gap-x-2 gap-y-1 text-sm font-medium text-wa-teal-dark sm:justify-start dark:text-wa-green">
+              {
+                d.hero.facts.map((f, i) => (
+                  <li class="flex items-center gap-2">
+                    {i > 0 && <span class="opacity-50" aria-hidden="true">•</span>}
+                    {f}
+                  </li>
+                ))
+              }
+            </ul>
+            <input type="file" multiple accept={ACCEPT} class="hidden" />
+          </div>
+
+          <div class="mt-5 flex flex-wrap gap-x-6 gap-y-2 text-sm font-medium">
+            <a href="#how" class="text-wa-muted hover:text-wa-teal dark:text-[#aebac1]">{d.hero.secondary}</a>
+            <a href={REPO_URL} rel="noopener" class="inline-flex items-center gap-1.5 text-wa-muted hover:text-wa-teal dark:text-[#aebac1]">
+              <GithubIcon class="size-4" />
+              {d.hero.github}
             </a>
           </div>
         </div>
@@ -67,8 +112,12 @@ const tailOut = '<svg class="wa-tail" viewBox="0 0 8 13"><path fill="currentColo
     <section class="bg-wa-teal-dark text-white dark:bg-[#0b3d33]">
       <div class="mx-auto grid max-w-6xl gap-10 px-4 py-16 md:grid-cols-2 md:items-center">
         <div>
-          <h2 class="text-3xl font-bold tracking-tight">{d.privacy.title}</h2>
-          <p class="mt-4 leading-7 text-white/85">{d.privacy.text}</p>
+          <div class="grid size-12 place-items-center rounded-2xl bg-white/15">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>
+          </div>
+          <h2 class="mt-5 text-3xl font-bold tracking-tight md:text-4xl">{d.privacy.title}</h2>
+          <p class="mt-4 text-xl font-semibold text-white">{d.privacy.lead}</p>
+          <p class="mt-3 leading-7 text-white/85">{d.privacy.text}</p>
         </div>
         <ul class="grid gap-3">
           {
@@ -126,10 +175,52 @@ const tailOut = '<svg class="wa-tail" viewBox="0 0 8 13"><path fill="currentColo
       </div>
     </section>
 
-    <section id="faq" class="scroll-mt-16">
+    <section id="tech" class="scroll-mt-16">
+      <div class="mx-auto grid max-w-6xl gap-12 px-4 py-20 lg:grid-cols-[2fr_3fr] lg:items-center">
+        <div>
+          <p class="text-sm font-semibold tracking-wide text-wa-teal uppercase">{d.tech.eyebrow}</p>
+          <h2 class="mt-3 text-3xl font-bold tracking-tight md:text-4xl">{d.tech.title}</h2>
+          <p class="mt-4 leading-7 text-wa-muted dark:text-[#aebac1]">{d.tech.subtitle}</p>
+          <div class="mt-8 flex items-baseline gap-3">
+            <span class="text-5xl font-bold tracking-tight whitespace-nowrap text-wa-teal">{d.tech.stat}</span>
+            <span class="text-wa-muted dark:text-[#aebac1]">{d.tech.statLabel}</span>
+          </div>
+          <ul class="mt-8 flex flex-wrap gap-2">
+            {
+              d.tech.stack.map((s) => (
+                <li class="rounded-full border border-black/10 px-3 py-1 text-sm dark:border-white/15">{s}</li>
+              ))
+            }
+          </ul>
+          <a
+            href={REPO_URL}
+            rel="noopener"
+            class="mt-8 inline-flex items-center gap-2.5 rounded-full bg-wa-ink px-6 py-3 font-semibold text-white transition hover:bg-black dark:bg-white dark:text-wa-ink dark:hover:bg-white/90"
+          >
+            <GithubIcon />
+            {d.tech.github}
+          </a>
+        </div>
+        <div class="grid gap-5 sm:grid-cols-2">
+          {
+            d.tech.items.map((item, i) => (
+              <div class="rounded-3xl border border-black/5 bg-wa-panel/60 p-7 dark:border-white/5 dark:bg-wa-panel-dark">
+                <div class="grid size-11 place-items-center rounded-2xl bg-wa-teal text-white">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" set:html={techIcons[i]} />
+                </div>
+                <h3 class="mt-5 text-lg font-semibold">{item.title}</h3>
+                <p class="mt-2 leading-7 text-wa-muted dark:text-[#aebac1]">{item.desc}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section id="faq" class="scroll-mt-16 bg-wa-panel/50 dark:bg-black/20">
       <div class="mx-auto max-w-3xl px-4 py-20">
         <h2 class="text-center text-3xl font-bold tracking-tight">{d.faq.title}</h2>
-        <div class="mt-10 divide-y divide-black/5 rounded-3xl border border-black/5 dark:divide-white/5 dark:border-white/10">
+        <div class="mt-10 divide-y divide-black/5 rounded-3xl border border-black/5 bg-white dark:divide-white/5 dark:border-white/10 dark:bg-wa-bg-dark">
           {
             d.faq.items.map((f) => (
               <details class="group px-6 py-5">
@@ -143,9 +234,11 @@ const tailOut = '<svg class="wa-tail" viewBox="0 0 8 13"><path fill="currentColo
           }
         </div>
         <div class="mt-14 text-center">
-          <a href={viewer} class="inline-block rounded-full bg-wa-teal px-8 py-3.5 font-semibold text-white shadow-lg shadow-wa-teal/25 transition hover:bg-wa-teal-dark">
+          <a href={viewer} class="group inline-flex items-center gap-2 rounded-full bg-wa-teal px-8 py-3.5 text-lg font-semibold text-white shadow-lg shadow-wa-teal/25 transition hover:bg-wa-teal-dark">
             {d.hero.cta}
+            <span class="transition group-hover:translate-x-0.5" aria-hidden="true">→</span>
           </a>
+          <p class="mt-3 text-sm text-wa-muted dark:text-[#8696a0]">{d.hero.facts.join(' • ')}</p>
         </div>
       </div>
     </section>
@@ -160,3 +253,68 @@ const tailOut = '<svg class="wa-tail" viewBox="0 0 8 13"><path fill="currentColo
     </div>
   </footer>
 </Base>
+
+<script>
+  import { HANDOFF_HASH, stashFiles } from '../lib/handoff';
+
+  const root = document.getElementById('hero-drop');
+  if (root) {
+    const input = root.querySelector('input')!;
+    const hint = root.querySelector<HTMLElement>('[data-hint]')!;
+    const idleText = hint.textContent;
+    const viewer = root.dataset.viewer!;
+    const hasFiles = (e: DragEvent) => !!e.dataTransfer?.types.includes('Files');
+    let depth = 0;
+
+    const setOver = (on: boolean) => {
+      root.toggleAttribute('data-over', on);
+      hint.textContent = on ? (root.dataset.dropActive ?? '') : idleText;
+    };
+
+    const open = async (files: File[]) => {
+      if (!files.length) return;
+      hint.textContent = root.dataset.opening ?? '';
+      root.setAttribute('aria-busy', 'true');
+      try {
+        await stashFiles(files);
+        location.href = viewer + HANDOFF_HASH;
+      } catch {
+        location.href = viewer;
+      }
+    };
+
+    root.querySelectorAll('[data-pick]').forEach((el) =>
+      el.addEventListener('click', (e) => {
+        e.preventDefault();
+        input.click();
+      }),
+    );
+    input.addEventListener('change', () => open([...(input.files ?? [])]));
+
+    window.addEventListener('dragenter', (e) => {
+      if (!hasFiles(e)) return;
+      depth++;
+      setOver(true);
+    });
+    window.addEventListener('dragleave', () => {
+      if (--depth > 0) return;
+      depth = 0;
+      setOver(false);
+    });
+    window.addEventListener('dragover', (e) => {
+      if (hasFiles(e)) e.preventDefault();
+    });
+    window.addEventListener('drop', (e) => {
+      if (!hasFiles(e)) return;
+      e.preventDefault();
+      depth = 0;
+      setOver(false);
+      open([...(e.dataTransfer?.files ?? [])]);
+    });
+    window.addEventListener('pageshow', () => {
+      root.removeAttribute('aria-busy');
+      hint.textContent = idleText;
+      input.value = '';
+    });
+  }
+</script>

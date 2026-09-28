@@ -1,8 +1,7 @@
 import { useRef, useState } from 'preact/hooks';
+import { ACCEPT } from '../../lib/handoff';
 import { dict, errorMsg, lang, status } from '../../lib/store';
 import { LockIcon, UploadIcon } from './icons';
-
-export const ACCEPT = '.txt,.zip,application/zip,text/plain,image/*,video/*,audio/*,.opus,.pdf,.vcf';
 
 export function Dropzone({ onFiles }: { onFiles: (files: File[]) => void }) {
   const d = dict.value;

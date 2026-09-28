@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
-import { routes, t, type Lang, type Page } from '../i18n';
+import GithubIcon from '../components/GithubIcon.astro';
+import { REPO_URL, routes, t, type Lang, type Page } from '../i18n';
 
 interface Props {
   lang: Lang;
@@ -73,11 +74,22 @@ const altUrl = routes[other][page];
             <nav class="ml-6 hidden items-center gap-5 text-sm text-wa-muted md:flex dark:text-[#aebac1]">
               <a href="#how" class="hover:text-wa-ink dark:hover:text-white">{d.nav.how}</a>
               <a href="#features" class="hover:text-wa-ink dark:hover:text-white">{d.nav.features}</a>
+              <a href="#tech" class="hover:text-wa-ink dark:hover:text-white">{d.nav.tech}</a>
               <a href="#faq" class="hover:text-wa-ink dark:hover:text-white">{d.nav.faq}</a>
             </nav>
           )
         }
         <div class="ml-auto flex items-center gap-2">
+          <a
+            href={REPO_URL}
+            rel="noopener"
+            title={d.hero.github}
+            aria-label={d.hero.github}
+            class="flex h-8 items-center gap-1.5 rounded-full px-2 text-sm font-medium text-wa-muted hover:bg-black/5 hover:text-wa-ink dark:text-[#aebac1] dark:hover:bg-white/10 dark:hover:text-white"
+          >
+            <GithubIcon />
+            <span class="hidden lg:inline">{d.nav.github}</span>
+          </a>
           <div
             class="flex rounded-full bg-wa-panel p-0.5 text-xs font-semibold dark:bg-white/10"
             role="group"

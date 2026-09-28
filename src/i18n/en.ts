@@ -6,24 +6,31 @@ export const en: Dict = {
   meta: {
     title: 'WhatsApp Viewer: read exported WhatsApp chats in your browser',
     description:
-      'Open the .txt or .zip exported from WhatsApp and read the chat with the same look as the app. Date and people filters, search, photos and PDF export. 100% in your browser, nothing is uploaded.',
+      'Open the .txt or .zip exported from WhatsApp and read the chat in a familiar, WhatsApp-inspired look. Date and people filters, search, photos and PDF export. 100% in your browser, nothing is uploaded.',
     viewerTitle: 'Open chat | WhatsApp Viewer',
   },
   nav: {
     how: 'How to export',
     features: 'Features',
     faq: 'FAQ',
+    tech: 'Technology',
+    github: 'GitHub',
     open: 'Open chat',
     language: 'Language',
     theme: 'Toggle theme',
   },
   hero: {
-    badge: '100% in your browser. Nothing leaves your computer.',
-    title: 'Read your exported WhatsApp chats as if you were in the app',
+    badge: 'Open source. 100% in your browser.',
+    title: 'Read your exported WhatsApp chats right in your browser',
     subtitle:
-      'Drop the .txt or .zip exported from WhatsApp and see the chat with bubbles, photos, voice notes and videos. Filter by date or person, search any text and export to PDF.',
-    cta: 'Open chat',
+      'Drop the exported .txt or .zip and see the chat with bubbles, photos, voice notes and videos in a familiar look. Filter by date or person, search any text and export to PDF.',
+    cta: 'Open a chat',
+    drop: 'or drag the file here',
+    dropActive: 'Drop the file to open it',
+    opening: 'Opening...',
+    facts: ['.txt or .zip', '100% local', 'no sign up'],
     secondary: 'How to export from WhatsApp',
+    github: 'View source on GitHub',
   },
   mock: {
     name: 'Anna',
@@ -35,8 +42,9 @@ export const en: Dict = {
     m4: 'Perfect, no need to install anything!',
   },
   privacy: {
-    title: 'Your chat never leaves your device',
-    text: 'There is no server processing your files. Everything is read and displayed by your own browser, so it even works offline once the page is loaded. Close the tab and nothing is kept.',
+    title: 'Your conversations stay on your device',
+    lead: 'No uploads. No backend processing. No account.',
+    text: "Your .txt or .zip is parsed directly in your browser. Your conversation doesn't need to be uploaded to a server, it even works offline once the page is loaded, and nothing is kept when you close the tab.",
     points: [
       'No upload: the file is read locally',
       'No sign up, no login',
@@ -71,13 +79,28 @@ export const en: Dict = {
   features: {
     title: 'Everything you need to read exported chats',
     items: [
-      { icon: 'bubble', title: 'Looks just like WhatsApp', desc: 'Bubbles, timestamps, date separators, colored names in groups and light or dark theme.' },
+      { icon: 'bubble', title: 'Familiar, WhatsApp-inspired look', desc: 'Bubbles, timestamps, date separators, colored names in groups and light or dark theme.' },
       { icon: 'image', title: 'Photos, videos and voice notes', desc: 'Open the .zip with media and see images, stickers, videos and audio right in the chat.' },
       { icon: 'calendar', title: 'Date filter', desc: 'Pick a period to see only messages in that range, or jump straight to a day.' },
       { icon: 'people', title: 'People filter', desc: 'In groups, show only messages from whoever you want, with a message count per person.' },
       { icon: 'search', title: 'Instant search', desc: 'Find any word, even without accents, and step through the results.' },
-      { icon: 'pdf', title: 'Export to PDF', desc: 'Create a PDF of the filtered chat with the same look, ready to archive or print.' },
+      { icon: 'pdf', title: 'Export to PDF', desc: 'Create a PDF of the filtered chat in the chat look, ready to archive or print.' },
     ],
+  },
+  tech: {
+    eyebrow: 'Under the hood',
+    title: 'Built for large conversations',
+    subtitle: 'A viewer that runs entirely in the browser, designed to stay fast even with years of history.',
+    stat: '200k',
+    statLabel: 'messages opened in about 1 second',
+    items: [
+      { title: 'Client-side processing', desc: 'Files are parsed locally in a Web Worker without freezing the UI. No backend is required to process conversations.' },
+      { title: 'Virtualized rendering', desc: 'Only visible messages are rendered, so conversations with hundreds of thousands of messages stay smooth.' },
+      { title: 'On-demand media', desc: 'The .zip is read with random access: each photo is extracted only when it scrolls into view, without loading everything into memory.' },
+      { title: 'Privacy by architecture', desc: 'There is no server to receive data, and the site security policy blocks sending anything out.' },
+    ],
+    stack: ['Astro', 'Preact', 'TypeScript', 'Web Workers', 'Virtualization', 'Tailwind CSS'],
+    github: 'View source on GitHub',
   },
   faq: {
     title: 'Frequently asked questions',

@@ -1,0 +1,162 @@
+---
+import Base from '../layouts/Base.astro';
+import { REPO_URL, dicts, routes, type Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const d = dicts[lang];
+const viewer = routes[lang].viewer;
+
+const icons: Record<string, string> = {
+  bubble: '<path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-5.1A8 8 0 1 1 21 12z"/>',
+  image: '<rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/>',
+  calendar: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/>',
+  people: '<circle cx="9" cy="8" r="4"/><path d="M2 21a7 7 0 0 1 14 0"/><path d="M16 4a4 4 0 0 1 0 8M22 21a7 7 0 0 0-4-6.3"/>',
+  search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
+  pdf: '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/>',
+};
+
+const tailIn = '<svg class="wa-tail" viewBox="0 0 8 13"><path fill="currentColor" d="M1.533 3.568 8 12.193V1H2.812C1.042 1 .474 2.156 1.533 3.568z"/></svg>';
+const tailOut = '<svg class="wa-tail" viewBox="0 0 8 13"><path fill="currentColor" d="M5.188 1H0v11.193l6.467-8.625C7.526 2.156 6.958 1 5.188 1z"/></svg>';
+---
+
+<Base lang={lang} page="home" title={d.meta.title} description={d.meta.description}>
+  <main>
+    <section class="relative overflow-hidden">
+      <div class="pointer-events-none absolute inset-x-0 -top-40 -z-10 h-[520px] bg-[radial-gradient(ellipse_at_top,rgba(0,168,132,0.18),transparent_65%)]"></div>
+      <div class="mx-auto grid max-w-6xl items-center gap-12 px-4 pt-14 pb-20 md:grid-cols-2 md:pt-20">
+        <div>
+          <span class="inline-flex items-center gap-2 rounded-full bg-wa-teal/10 px-3 py-1 text-xs font-semibold text-wa-teal-dark dark:text-wa-green">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>
+            {d.hero.badge}
+          </span>
+          <h1 class="mt-5 text-4xl leading-tight font-bold tracking-tight text-balance md:text-5xl">{d.hero.title}</h1>
+          <p class="mt-5 text-lg leading-8 text-wa-muted dark:text-[#aebac1]">{d.hero.subtitle}</p>
+          <div class="mt-8 flex flex-wrap gap-3">
+            <a href={viewer} class="rounded-full bg-wa-teal px-7 py-3 font-semibold text-white shadow-lg shadow-wa-teal/25 transition hover:bg-wa-teal-dark">
+              {d.hero.cta}
+            </a>
+            <a href="#how" class="rounded-full border border-black/10 px-7 py-3 font-semibold transition hover:bg-black/5 dark:border-white/15 dark:hover:bg-white/5">
+              {d.hero.secondary}
+            </a>
+          </div>
+        </div>
+
+        <div class="wa mx-auto w-full max-w-md overflow-hidden rounded-3xl shadow-2xl ring-1 ring-black/5 dark:ring-white/10" aria-hidden="true">
+          <div class="flex h-[59px] items-center gap-3 bg-wa-panel px-4 dark:bg-wa-panel-dark">
+            <div class="grid size-10 place-items-center rounded-full bg-[#e542a3] text-sm font-semibold text-white">{d.mock.name[0]}</div>
+            <div>
+              <div class="text-base leading-5">{d.mock.name}</div>
+              <div class="text-[13px] leading-5 text-wa-muted dark:text-[#8696a0]">{d.mock.status}</div>
+            </div>
+          </div>
+          <div class="wa-bg pt-2 pb-5">
+            <div class="wa-chip-row"><span class="wa-chip date">{d.mock.today}</span></div>
+            <div class="wa-row in first"><div class="wa-bubble"><Fragment set:html={tailIn} />{d.mock.m1}<span class="wa-spacer"></span><span class="wa-meta">09:41</span></div></div>
+            <div class="wa-row out first"><div class="wa-bubble"><Fragment set:html={tailOut} />{d.mock.m2}<span class="wa-spacer"></span><span class="wa-meta">09:42</span></div></div>
+            <div class="wa-row out"><div class="wa-bubble">{d.mock.m3}<span class="wa-spacer"></span><span class="wa-meta">09:42</span></div></div>
+            <div class="wa-row in first"><div class="wa-bubble"><Fragment set:html={tailIn} />{d.mock.m4}<span class="wa-spacer"></span><span class="wa-meta">09:43</span></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-wa-teal-dark text-white dark:bg-[#0b3d33]">
+      <div class="mx-auto grid max-w-6xl gap-10 px-4 py-16 md:grid-cols-2 md:items-center">
+        <div>
+          <h2 class="text-3xl font-bold tracking-tight">{d.privacy.title}</h2>
+          <p class="mt-4 leading-7 text-white/85">{d.privacy.text}</p>
+        </div>
+        <ul class="grid gap-3">
+          {
+            d.privacy.points.map((p) => (
+              <li class="flex items-center gap-3 rounded-2xl bg-white/10 px-5 py-4">
+                <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg>
+                <span>{p}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+
+    <section id="how" class="scroll-mt-16">
+      <div class="mx-auto max-w-6xl px-4 py-20">
+        <h2 class="text-center text-3xl font-bold tracking-tight">{d.how.title}</h2>
+        <p class="mx-auto mt-3 max-w-2xl text-center text-wa-muted dark:text-[#aebac1]">{d.how.subtitle}</p>
+        <div class="mt-12 grid gap-6 md:grid-cols-2">
+          {
+            [d.how.android, d.how.ios].map((os) => (
+              <div class="rounded-3xl border border-black/5 bg-wa-panel/60 p-7 dark:border-white/5 dark:bg-wa-panel-dark">
+                <h3 class="text-xl font-semibold">{os.title}</h3>
+                <ol class="mt-5 grid gap-4">
+                  {os.steps.map((s, i) => (
+                    <li class="flex gap-4">
+                      <span class="grid size-7 shrink-0 place-items-center rounded-full bg-wa-teal text-sm font-bold text-white">{i + 1}</span>
+                      <span class="pt-0.5 leading-6">{s}</span>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section id="features" class="scroll-mt-16 bg-wa-panel/50 dark:bg-black/20">
+      <div class="mx-auto max-w-6xl px-4 py-20">
+        <h2 class="text-center text-3xl font-bold tracking-tight">{d.features.title}</h2>
+        <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {
+            d.features.items.map((f) => (
+              <div class="rounded-3xl bg-white p-7 shadow-sm ring-1 ring-black/5 dark:bg-wa-panel-dark dark:ring-white/5">
+                <div class="grid size-12 place-items-center rounded-2xl bg-wa-teal/10 text-wa-teal">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" set:html={icons[f.icon]} />
+                </div>
+                <h3 class="mt-5 text-lg font-semibold">{f.title}</h3>
+                <p class="mt-2 leading-7 text-wa-muted dark:text-[#aebac1]">{f.desc}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section id="faq" class="scroll-mt-16">
+      <div class="mx-auto max-w-3xl px-4 py-20">
+        <h2 class="text-center text-3xl font-bold tracking-tight">{d.faq.title}</h2>
+        <div class="mt-10 divide-y divide-black/5 rounded-3xl border border-black/5 dark:divide-white/5 dark:border-white/10">
+          {
+            d.faq.items.map((f) => (
+              <details class="group px-6 py-5">
+                <summary class="flex cursor-pointer list-none items-center justify-between gap-4 font-medium">
+                  {f.q}
+                  <svg class="shrink-0 transition group-open:rotate-45" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14" /></svg>
+                </summary>
+                <p class="mt-3 leading-7 text-wa-muted dark:text-[#aebac1]">{f.a}</p>
+              </details>
+            ))
+          }
+        </div>
+        <div class="mt-14 text-center">
+          <a href={viewer} class="inline-block rounded-full bg-wa-teal px-8 py-3.5 font-semibold text-white shadow-lg shadow-wa-teal/25 transition hover:bg-wa-teal-dark">
+            {d.hero.cta}
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-black/5 dark:border-white/5">
+    <div class="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-8 text-sm text-wa-muted md:flex-row md:items-center md:justify-between dark:text-[#8696a0]">
+      <p>
+        {d.footer.made} · <a href={REPO_URL} class="hover:text-wa-teal" rel="noopener">{d.footer.source}</a>
+      </p>
+      <p class="text-xs">{d.footer.disclaimer}</p>
+    </div>
+  </footer>
+</Base>

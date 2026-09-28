@@ -1,0 +1,25 @@
+---
+import Base from '../layouts/Base.astro';
+import ViewerApp from './viewer/ViewerApp';
+import { dicts, type Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const d = dicts[lang];
+---
+
+<Base lang={lang} page="viewer" title={d.meta.viewerTitle} description={d.meta.description} app>
+  <main class="flex min-h-0 flex-1 flex-col">
+    <ViewerApp
+      client:only="preact"
+      initialLang={lang}
+      dicts={{ pt: dicts.pt.viewer, en: dicts.en.viewer }}
+      titles={{ pt: dicts.pt.meta.viewerTitle, en: dicts.en.meta.viewerTitle }}
+    >
+      <div slot="fallback" class="wa wa-bg flex-1"></div>
+    </ViewerApp>
+  </main>
+</Base>

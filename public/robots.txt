@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://whatsappviewer.zenvixlabs.app/sitemap.xml

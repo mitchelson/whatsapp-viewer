@@ -1,0 +1,359 @@
+/* Chat look modeled on WhatsApp Web. */
+
+.wa {
+  --wa-bg: #efeae2;
+  --wa-doodle: #000;
+  --wa-doodle-opacity: 0.06;
+  --wa-in: #ffffff;
+  --wa-out: #d9fdd3;
+  --wa-text: #111b21;
+  --wa-meta: rgba(17, 27, 33, 0.5);
+  --wa-chip-bg: #ffffff;
+  --wa-chip-text: #54656f;
+  --wa-system-bg: #ffeecd;
+  --wa-system-text: #54656f;
+  --wa-link: #027eb5;
+  --wa-shadow: 0 1px 0.5px rgba(11, 20, 26, 0.13);
+  --wa-hl: rgba(255, 210, 121, 0.9);
+  --wa-hl-current: #ff9500;
+  --wa-quote: rgba(11, 20, 26, 0.05);
+  --wa-doc: rgba(11, 20, 26, 0.05);
+}
+
+.dark .wa {
+  --wa-bg: #0b141a;
+  --wa-doodle: #fff;
+  --wa-doodle-opacity: 0.045;
+  --wa-in: #202c33;
+  --wa-out: #005c4b;
+  --wa-text: #e9edef;
+  --wa-meta: rgba(233, 237, 239, 0.6);
+  --wa-chip-bg: #182229;
+  --wa-chip-text: #8696a0;
+  --wa-system-bg: #182229;
+  --wa-system-text: #ffd279;
+  --wa-link: #53bdeb;
+  --wa-shadow: 0 1px 0.5px rgba(11, 20, 26, 0.13);
+  --wa-hl: rgba(255, 210, 121, 0.45);
+  --wa-hl-current: #ff9500;
+  --wa-quote: rgba(255, 255, 255, 0.06);
+  --wa-doc: rgba(0, 0, 0, 0.18);
+}
+
+.wa-bg {
+  position: relative;
+  background-color: var(--wa-bg);
+  isolation: isolate;
+}
+
+.wa-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-color: var(--wa-doodle);
+  opacity: var(--wa-doodle-opacity);
+  -webkit-mask-image: url("/doodle.svg");
+  mask-image: url("/doodle.svg");
+  -webkit-mask-size: 360px 360px;
+  mask-size: 360px 360px;
+  -webkit-mask-repeat: repeat;
+  mask-repeat: repeat;
+}
+
+.wa-row {
+  display: flex;
+  padding: 1px 4%;
+  color: var(--wa-text);
+}
+
+@media (min-width: 900px) {
+  .wa-row {
+    padding-left: 63px;
+    padding-right: 63px;
+  }
+}
+
+.wa-row.first {
+  padding-top: 10px;
+}
+
+.wa-row.out {
+  justify-content: flex-end;
+}
+
+.wa-bubble {
+  position: relative;
+  max-width: min(65%, 620px);
+  min-width: 80px;
+  padding: 6px 7px 8px 9px;
+  border-radius: 7.5px;
+  background: var(--wa-in);
+  box-shadow: var(--wa-shadow);
+  font-size: 14.2px;
+  line-height: 19px;
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+@media (max-width: 640px) {
+  .wa-bubble {
+    max-width: 85%;
+  }
+}
+
+.out .wa-bubble {
+  background: var(--wa-out);
+}
+
+.first.in .wa-bubble {
+  border-top-left-radius: 0;
+}
+
+.first.out .wa-bubble {
+  border-top-right-radius: 0;
+}
+
+.wa-tail {
+  position: absolute;
+  top: 0;
+  width: 8px;
+  height: 13px;
+  color: var(--wa-in);
+}
+
+.in .wa-tail {
+  left: -8px;
+}
+
+.out .wa-tail {
+  right: -8px;
+  color: var(--wa-out);
+}
+
+.wa-author {
+  display: block;
+  font-size: 12.8px;
+  font-weight: 500;
+  line-height: 22px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.wa-text a {
+  color: var(--wa-link);
+  text-decoration: none;
+}
+
+.wa-text a:hover {
+  text-decoration: underline;
+}
+
+.wa-text code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 13px;
+}
+
+.wa-spacer {
+  display: inline-block;
+  width: 64px;
+  height: 1px;
+  vertical-align: middle;
+}
+
+.wa-spacer.wide {
+  width: 104px;
+}
+
+.wa-meta {
+  position: absolute;
+  right: 7px;
+  bottom: 3px;
+  font-size: 11px;
+  line-height: 15px;
+  color: var(--wa-meta);
+  white-space: nowrap;
+}
+
+.wa-meta.on-media {
+  color: #fff;
+  right: 11px;
+  bottom: 7px;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.6);
+}
+
+.wa-italic {
+  font-style: italic;
+  color: var(--wa-meta);
+}
+
+.wa-hl {
+  background: var(--wa-hl);
+  color: inherit;
+  border-radius: 2px;
+}
+
+.wa-hl.current {
+  background: var(--wa-hl-current);
+  color: #111b21;
+}
+
+.wa-row.flash .wa-bubble {
+  animation: wa-flash 1.4s ease-out;
+}
+
+@keyframes wa-flash {
+  0%,
+  40% {
+    filter: brightness(0.82);
+  }
+  100% {
+    filter: none;
+  }
+}
+
+.wa-chip-row {
+  display: flex;
+  justify-content: center;
+  padding: 12px 4% 6px;
+}
+
+.wa-chip {
+  padding: 5px 12px 6px;
+  border-radius: 7.5px;
+  background: var(--wa-chip-bg);
+  color: var(--wa-chip-text);
+  box-shadow: var(--wa-shadow);
+  font-size: 12.5px;
+  line-height: 21px;
+  text-align: center;
+  max-width: 90%;
+}
+
+.wa-chip.date {
+  text-transform: uppercase;
+}
+
+.wa-chip.system {
+  background: var(--wa-system-bg);
+  color: var(--wa-system-text);
+  white-space: pre-wrap;
+}
+
+.wa-media {
+  display: block;
+  margin: -3px -4px 3px -6px;
+  border-radius: 6px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.06);
+  cursor: zoom-in;
+}
+
+.wa-media img,
+.wa-media video {
+  display: block;
+  width: 100%;
+  max-width: 330px;
+  max-height: 360px;
+  min-width: 200px;
+  object-fit: cover;
+}
+
+.wa-media.placeholder {
+  width: 330px;
+  max-width: 100%;
+  height: 220px;
+}
+
+.wa-sticker img {
+  width: 150px;
+  height: 150px;
+  object-fit: contain;
+  display: block;
+}
+
+.wa-bubble.sticker {
+  background: transparent;
+  box-shadow: none;
+  padding: 0 0 18px;
+}
+
+.wa-bubble.sticker .wa-meta {
+  background: var(--wa-chip-bg);
+  padding: 0 6px;
+  border-radius: 8px;
+  bottom: 0;
+}
+
+.wa-doc {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: -2px -3px 4px -5px;
+  padding: 10px 12px;
+  border-radius: 6px;
+  background: var(--wa-doc);
+  color: inherit;
+  text-decoration: none;
+  min-width: 220px;
+  white-space: normal;
+}
+
+.wa-audio {
+  display: block;
+  width: 280px;
+  max-width: 100%;
+  height: 40px;
+  margin: 2px 0 6px;
+}
+
+.wa-missing {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--wa-meta);
+  font-style: italic;
+  white-space: normal;
+}
+
+/* Print: keep the WhatsApp look on paper, always in the light theme. */
+.wa.wa-print,
+.dark .wa.wa-print {
+  --wa-in: #ffffff;
+  --wa-out: #d9fdd3;
+  --wa-text: #111b21;
+  --wa-meta: rgba(17, 27, 33, 0.5);
+  --wa-chip-bg: #ffffff;
+  --wa-chip-text: #54656f;
+  --wa-system-bg: #ffeecd;
+  --wa-system-text: #54656f;
+  --wa-link: #027eb5;
+  --wa-doc: rgba(11, 20, 26, 0.05);
+  background: #efeae2;
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+
+.wa-print .wa-row {
+  padding-left: 0;
+  padding-right: 0;
+  break-inside: avoid;
+}
+
+.wa-print .wa-chip-row {
+  break-inside: avoid;
+  break-after: avoid;
+}
+
+.wa-print .wa-bubble {
+  max-width: 78%;
+  box-shadow: none;
+  border: 1px solid rgba(11, 20, 26, 0.08);
+}
+
+.wa-print .wa-media img {
+  max-height: 260px;
+}

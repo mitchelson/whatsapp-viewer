@@ -1,0 +1,141 @@
+---
+import '../styles/global.css';
+import { routes, t, type Lang, type Page } from '../i18n';
+
+interface Props {
+  lang: Lang;
+  page: Page;
+  title: string;
+  description: string;
+  app?: boolean;
+}
+
+const { lang, page, title, description, app = false } = Astro.props;
+const d = t(lang);
+const other: Lang = lang === 'pt' ? 'en' : 'pt';
+const site = Astro.site?.toString().replace(/\/$/, '') ?? '';
+const canonical = site + routes[lang][page];
+const altUrl = routes[other][page];
+---
+
+<!doctype html>
+<html lang={d.htmlLang} data-lang={lang} data-alt={altUrl}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang="pt-BR" href={site + routes.pt[page]} />
+    <link rel="alternate" hreflang="en" href={site + routes.en[page]} />
+    <link rel="alternate" hreflang="x-default" href={site + routes.pt[page]} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="theme-color" content="#00a884" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={site + '/og.png'} />
+    <meta property="og:locale" content={lang === 'pt' ? 'pt_BR' : 'en_US'} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script is:inline>
+      (function () {
+        try {
+          var d = document.documentElement;
+          var th = localStorage.getItem('wv-theme');
+          if (th === 'dark' || (!th && matchMedia('(prefers-color-scheme: dark)').matches)) d.classList.add('dark');
+          var l = localStorage.getItem('wv-lang');
+          if (l && l !== d.dataset.lang && d.dataset.alt) location.replace(d.dataset.alt + location.hash);
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body
+    class:list={[
+      'bg-white text-wa-ink dark:bg-wa-bg-dark dark:text-[#e9edef]',
+      app ? 'flex h-dvh flex-col overflow-hidden' : 'min-h-dvh',
+    ]}
+  >
+    <header
+      class:list={[
+        'z-30 border-b border-black/5 bg-white/85 backdrop-blur dark:border-white/5 dark:bg-wa-panel-dark/90 print:hidden',
+        app ? 'shrink-0' : 'sticky top-0',
+      ]}
+    >
+      <div class:list={['mx-auto flex items-center gap-3 px-4', app ? 'h-12 max-w-none' : 'h-14 max-w-6xl']}>
+        <a href={routes[lang].home} data-home-link class="flex items-center gap-2 font-semibold tracking-tight">
+          <img src="/favicon.svg" alt="" width="28" height="28" class="size-7" />
+          <span>WhatsApp Viewer</span>
+          <span class="hidden text-xs font-normal text-wa-muted sm:inline">by Zenvix Labs</span>
+        </a>
+        {
+          !app && (
+            <nav class="ml-6 hidden items-center gap-5 text-sm text-wa-muted md:flex dark:text-[#aebac1]">
+              <a href="#how" class="hover:text-wa-ink dark:hover:text-white">{d.nav.how}</a>
+              <a href="#features" class="hover:text-wa-ink dark:hover:text-white">{d.nav.features}</a>
+              <a href="#faq" class="hover:text-wa-ink dark:hover:text-white">{d.nav.faq}</a>
+            </nav>
+          )
+        }
+        <div class="ml-auto flex items-center gap-2">
+          <div
+            class="flex rounded-full bg-wa-panel p-0.5 text-xs font-semibold dark:bg-white/10"
+            role="group"
+            aria-label={d.nav.language}
+          >
+            {
+              (['pt', 'en'] as Lang[]).map((l) => (
+                <a
+                  href={routes[l][page]}
+                  data-lang-switch={l}
+                  hreflang={l === 'pt' ? 'pt-BR' : 'en'}
+                  aria-current={l === lang ? 'true' : undefined}
+                  class="rounded-full px-2.5 py-1 text-wa-muted transition aria-[current]:bg-white aria-[current]:text-wa-ink aria-[current]:shadow-sm dark:text-[#aebac1] dark:aria-[current]:bg-wa-teal dark:aria-[current]:text-white"
+                >
+                  {l.toUpperCase()}
+                </a>
+              ))
+            }
+          </div>
+          <button
+            type="button"
+            data-theme-toggle
+            aria-label={d.nav.theme}
+            title={d.nav.theme}
+            class="grid size-8 place-items-center rounded-full text-wa-muted hover:bg-black/5 dark:text-[#aebac1] dark:hover:bg-white/10"
+          >
+            <svg class="size-5 dark:hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path></svg>
+            <svg class="hidden size-5 dark:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+          </button>
+          {
+            !app && (
+              <a
+                href={routes[lang].viewer}
+                class="hidden rounded-full bg-wa-teal px-4 py-1.5 text-sm font-semibold text-white hover:bg-wa-teal-dark sm:inline-block"
+              >
+                {d.nav.open}
+              </a>
+            )
+          }
+        </div>
+      </div>
+    </header>
+    <slot />
+    <script is:inline>
+      (function () {
+        document.addEventListener('click', function (e) {
+          var el = e.target instanceof Element ? e.target.closest('[data-lang-switch],[data-theme-toggle]') : null;
+          if (!el) return;
+          try {
+            if (el.hasAttribute('data-theme-toggle')) {
+              var dark = document.documentElement.classList.toggle('dark');
+              localStorage.setItem('wv-theme', dark ? 'dark' : 'light');
+            } else {
+              localStorage.setItem('wv-lang', el.getAttribute('data-lang-switch'));
+            }
+          } catch (err) {}
+        });
+      })();
+    </script>
+  </body>
+</html>
